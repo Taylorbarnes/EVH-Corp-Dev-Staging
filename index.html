@@ -75,8 +75,21 @@
     .hero{padding:72px 0 36px;text-align:center}
 .eyebrow{display:inline-block;font-size:14px;padding:6px 10px;color:#a6eec5;background:rgba(49,196,108,.1);border:1px solid rgba(49,196,108,.25);border-radius:999px;letter-spacing:.2px;text-decoration:none;transition:all .2s ease}
 .eyebrow:hover{background:rgba(49,196,108,.15);border-color:rgba(49,196,108,.4);transform:translateY(-1px);color:#b8f0cc}    .title{font-family:Georgia,"Times New Roman",Times,serif;font-weight:600;font-size:clamp(36px,6vw,68px);line-height:1.05;letter-spacing:-.3px;margin:18px 0 16px}
-    .subtitle{color:var(--muted);font-size:clamp(16px,2.2vw,20px);max-width:52ch;margin:0 auto}
-
+.subtitle{
+  color:var(--muted);font-size:clamp(16px,2.2vw,20px);max-width:58ch;margin:0 auto;
+  line-height:1.5;position:relative;
+}
+.subtitle .highlight{
+  color:var(--text);font-weight:600;
+  background:linear-gradient(135deg, var(--lt), var(--green));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;position:relative;
+}
+.subtitle .highlight::after{
+  content:"";position:absolute;bottom:-2px;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--green),var(--lt));
+  border-radius:2px;opacity:.6;
+}
     /* ===== HERO metrics: animated via data-animated guard ===== */
     .metrics{display:grid;grid-template-columns:1fr;gap:16px;margin:40px auto 0;max-width:780px}
     @media(min-width:760px){.metrics{grid-template-columns:repeat(3,1fr);gap:20px}}
@@ -219,8 +232,7 @@
     <header class="hero" id="home" data-animated="false">
       <a href="#contact" class="eyebrow">Partner with us</a>      
       <h1 class="title">Where energy &amp; environment intersect</h1>
-      <p class="subtitle">EVH Corporate Development, LLC is an energy operating &amp; holdings firm<br/>bending the curve on new energy solutions.</p>
-
+<p class="subtitle">EVH Corporate Development, LLC is an <span class="highlight">energy operating &amp; holdings firm</span><br/>bending the curve on <span class="highlight">new energy solutions</span>.</p>
       <div class="metrics" aria-label="Impact metrics">
         <div class="metric"><h3>30+</h3><p>Years of impact</p></div>
         <div class="metric"><h3>$500M+</h3><p>Capital deployed by our leadership team in the last 5 years</p></div>
@@ -535,6 +547,7 @@ document.querySelector('.eyebrow').addEventListener('click', function(e) {
   </script>
 </body>
 </html>
+
 
 
 
