@@ -53,17 +53,65 @@
     @keyframes ringPulse{0%,100%{transform:scale(.96);opacity:.5}50%{transform:scale(1.03);opacity:.62}}
     @media (prefers-reduced-motion:reduce){.bg-rings::before{animation:none}}
 
-    /* ===== Layout ===== */
+    /* ===== Layout with Device Optimization ===== */
     .wrap{max-width:860px;margin:0 auto;padding:48px 20px}
+    
+    /* Desktop optimizations (1200px+) */
+    @media(min-width:1200px){
+      .wrap{max-width:1080px;padding:64px 32px}
+      .hero{padding:96px 0 48px}
+    }
+    
+    /* Tablet optimizations (768px - 1199px) */
+    @media(min-width:768px) and (max-width:1199px){
+      .wrap{padding:40px 24px}
+      .hero{padding:60px 0 32px}
+    }
+    
+    /* Mobile optimizations (320px - 767px) */
+    @media(max-width:767px){
+      .wrap{padding:32px 16px}
+      .hero{padding:40px 0 24px}
+    }
+    
+    /* Very small mobile (320px - 480px) */
+    @media(max-width:480px){
+      .wrap{padding:24px 12px}
+    }
+    
     .nav{position:sticky;top:0;backdrop-filter:blur(8px);background:rgba(10,10,10,.55);
       display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 20px 8px;z-index:10}
+    
+    /* Mobile nav optimization */
+    @media(max-width:767px){
+      .nav{padding:16px 16px 8px;gap:8px}
+      .brand{font-size:14px}
+      .brand-logo{width:24px;height:24px}
+      .brand-logo::before{inset:4px 5px;width:14px;height:14px}
+    }
+    
     .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:600;letter-spacing:.2px}
     .brand-logo{width:28px;height:28px;border-radius:8px;position:relative;background:#0d120f;border:1px solid var(--border)}
     .brand-logo::before{content:"";position:absolute;inset:5px 6px;width:16px;height:16px;border-radius:50%;
       background:radial-gradient(circle at 35% 35%, var(--lt), var(--green)); box-shadow:0 8px 24px rgba(44,197,110,.35)}
     .nav a{color:var(--muted);text-decoration:none;font-size:14px}
     .nav a:hover{color:var(--text)}
-    .nav-links{white-space:nowrap}
+    .nav-links{white-space:nowrap;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+    .nav-links::-webkit-scrollbar{display:none}
+    
+    /* Mobile nav links */
+    @media(max-width:767px){
+      .nav-links{font-size:12px;gap:4px;display:flex}
+      .nav-links a{padding:8px 6px;white-space:nowrap}
+      .nav-links a + a::before{content:"";margin:0}
+    }
+    
+    /* Tablet nav links */
+    @media(min-width:768px) and (max-width:1023px){
+      .nav-links{font-size:13px}
+      .nav-links a{padding:6px 4px}
+    }
+    
     .nav-links a{position:relative;padding-bottom:8px;display:inline-block}
     .nav-links a + a::before{content:"·";margin:0 8px;color:var(--muted)}
     .nav-links a::after{
@@ -73,12 +121,41 @@
     .nav-links a:hover::after{width:100%}
 
     .hero{padding:72px 0 36px;text-align:center}
+    
+    /* Hero responsive optimizations */
+    @media(max-width:767px){
+      .hero{padding:48px 0 24px}
+    }
+    
+    @media(min-width:1200px){
+      .hero{padding:96px 0 48px}
+    }
+    
 .eyebrow{display:inline-block;font-size:14px;padding:6px 10px;color:#a6eec5;background:rgba(49,196,108,.1);border:1px solid rgba(49,196,108,.25);border-radius:999px;letter-spacing:.2px;text-decoration:none;transition:all .2s ease}
-.eyebrow:hover{background:rgba(49,196,108,.15);border-color:rgba(49,196,108,.4);transform:translateY(-1px);color:#b8f0cc}    .title{font-family:Georgia,"Times New Roman",Times,serif;font-weight:600;font-size:clamp(36px,6vw,68px);line-height:1.05;letter-spacing:-.3px;margin:18px 0 16px}
+.eyebrow:hover{background:rgba(49,196,108,.15);border-color:rgba(49,196,108,.4);transform:translateY(-1px);color:#b8f0cc}
+
+/* Mobile eyebrow optimization */
+@media(max-width:767px){
+  .eyebrow{font-size:12px;padding:5px 8px}
+}
+
+.title{font-family:Georgia,"Times New Roman",Times,serif;font-weight:600;font-size:clamp(36px,6vw,68px);line-height:1.05;letter-spacing:-.3px;margin:18px 0 16px}
+
+/* Improved mobile title scaling */
+@media(max-width:480px){
+  .title{font-size:clamp(28px,8vw,42px);line-height:1.1;margin:14px 0 12px}
+}
+
 .subtitle{
   color:var(--muted);font-size:clamp(16px,2.2vw,20px);max-width:48ch;margin:0 auto;
   line-height:1.5;position:relative;
 }
+
+/* Mobile subtitle optimization */
+@media(max-width:767px){
+  .subtitle{font-size:clamp(14px,3.5vw,18px);max-width:90%;line-height:1.4;margin:0 auto}
+}
+
 .subtitle .highlight{
   color:var(--text);font-weight:600;
   background:linear-gradient(135deg, var(--lt), var(--green));
@@ -92,12 +169,36 @@
 }
     /* ===== HERO metrics: animated via data-animated guard ===== */
     .metrics{display:grid;grid-template-columns:1fr;gap:16px;margin:40px auto 0;max-width:780px}
-    @media(min-width:760px){.metrics{grid-template-columns:repeat(3,1fr);gap:20px}}
+    
+    /* Responsive metrics grid */
+    @media(min-width:480px) and (max-width:767px){
+      .metrics{grid-template-columns:1fr 1fr;gap:12px;margin:32px auto 0}
+    }
+    
+    @media(min-width:768px){
+      .metrics{grid-template-columns:repeat(3,1fr);gap:20px;margin:48px auto 0}
+    }
+    
+    @media(min-width:1200px){
+      .metrics{gap:24px;margin:56px auto 0;max-width:900px}
+    }
+    
     .metric{
       background:linear-gradient(180deg, rgba(139,227,159,.08), rgba(139,227,159,.02));
       border:1px solid var(--border);border-radius:16px;padding:24px 20px;text-align:center;
       position:relative;overflow:hidden;transition:all .3s ease; backdrop-filter:blur(8px);
     }
+    
+    /* Mobile metric optimization */
+    @media(max-width:767px){
+      .metric{padding:18px 14px;border-radius:12px}
+    }
+    
+    /* Desktop metric enhancement */
+    @media(min-width:1200px){
+      .metric{padding:28px 24px;border-radius:18px}
+    }
+    
     .metric::before{
       content:"";position:absolute;inset:0;border-radius:16px;padding:1px;
       background:linear-gradient(135deg, rgba(139,227,159,.3), transparent 50%, rgba(44,197,110,.2));
@@ -115,6 +216,13 @@
       background-clip:text;line-height:1.1;letter-spacing:-.5px;
       opacity:0;
     }
+    
+    /* Mobile metric text optimization */
+    @media(max-width:767px){
+      .metric h3{font-size:clamp(24px,6vw,36px)}
+      .metric p{font-size:13px;margin:6px 0 0}
+    }
+    
     .metric p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.4;font-weight:500}
 
     /* turn on the animation when the guard is flipped */
@@ -137,25 +245,126 @@
     }
 
     .card{margin:36px auto 0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;align-items:center;gap:14px;max-width:720px}
+    
+    /* Mobile card optimization - stack vertically */
+    @media(max-width:767px){
+      .card{flex-direction:column;align-items:stretch;gap:12px;padding:16px;margin:24px auto 0}
+    }
+    
+    /* Small mobile optimization */
+    @media(max-width:480px){
+      .card{padding:14px;gap:10px}
+    }
+    
     .card small{color:var(--muted)}
     .input{flex:1;display:flex;gap:10px;background:#0e0f10;border:1px solid var(--border);border-radius:12px;padding:8px}
+    
+    /* Mobile input optimization */
+    @media(max-width:767px){
+      .input{gap:8px;padding:6px}
+    }
+    
     .input input{flex:1;background:transparent;border:0;color:var(--text);padding:12px 12px;font-size:16px;outline:none}
+    
+    /* Mobile input text */
+    @media(max-width:767px){
+      .input input{padding:10px;font-size:16px} /* Keep 16px to prevent zoom on iOS */
+    }
+    
     .btn{appearance:none;border:0;background:var(--green);color:#06140b;font-weight:700;padding:12px 18px;border-radius:10px;cursor:pointer;transition:transform .04s ease, filter .2s}
     .btn:hover{filter:brightness(1.05)} .btn:active{transform:translateY(1px)}
+    
+    /* Mobile button optimization */
+    @media(max-width:767px){
+      .btn{width:100%;padding:14px;font-size:16px}
+    }
 
     .section{position:relative;padding:84px 0 12px;border-top:1px solid var(--border);margin-top:64px;scroll-margin-top:84px}
+    
+    /* Responsive section spacing */
+    @media(max-width:767px){
+      .section{padding:48px 0 12px;margin-top:40px;scroll-margin-top:60px}
+    }
+    
+    @media(min-width:768px) and (max-width:1023px){
+      .section{padding:64px 0 12px;margin-top:52px}
+    }
+    
+    @media(min-width:1200px){
+      .section{padding:100px 0 16px;margin-top:80px}
+    }
+    
     .section h2{font-family:Georgia,"Times New Roman",Times,serif;font-weight:600;font-size:clamp(26px,3.4vw,40px);line-height:1.15;margin:0 0 8px}
+    
+    /* Mobile h2 optimization */
+    @media(max-width:767px){
+      .section h2{font-size:clamp(22px,4.5vw,32px);line-height:1.2;margin:0 0 6px}
+    }
+    
     .lead{color:var(--muted);margin:0 0 22px}
+    
+    /* Mobile lead text */
+    @media(max-width:767px){
+      .lead{font-size:15px;margin:0 0 18px;line-height:1.5}
+    }
+    
     .grid{display:grid;grid-template-columns:1fr;gap:16px}
-    @media(min-width:760px){.grid{grid-template-columns:1fr 1fr;gap:18px}}
+    
+    /* Responsive grid breakpoints */
+    @media(min-width:600px) and (max-width:1023px){
+      .grid{grid-template-columns:1fr 1fr;gap:16px}
+    }
+    
+    @media(min-width:1024px){
+      .grid{grid-template-columns:1fr 1fr;gap:18px}
+    }
+    
+    @media(min-width:1200px){
+      .grid{gap:22px}
+    }
+    
     .tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease}
+    
+    /* Mobile tile optimization */
+    @media(max-width:767px){
+      .tile{padding:16px;border-radius:12px}
+    }
+    
+    /* Desktop tile enhancement */
+    @media(min-width:1200px){
+      .tile{padding:22px;border-radius:16px}
+    }
+    
     .tile:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.35);border-color:rgba(139,227,159,.35)}
+    
+    /* Disable hover effects on touch devices */
+    @media(hover:none){
+      .tile:hover{transform:none;box-shadow:none;border-color:var(--border)}
+    }
     footer{color:var(--muted);font-size:13px;padding:64px 0 32px;text-align:center}
+    
+    /* Mobile footer optimization */
+    @media(max-width:767px){
+      footer{padding:40px 0 24px;font-size:12px}
+    }
+    
     .tiny{color:#9aa0a6;font-size:12px}
+    
+    /* Mobile tiny text */
+    @media(max-width:767px){
+      .tiny{font-size:11px;line-height:1.4}
+    }
+    
     :focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px;transition:outline-color .2s}
 
     /* ===== Section variants (Cursor-style variety) ===== */
     .section .wrap-inner{max-width:860px;margin:0 auto}
+    
+    /* Responsive wrap-inner */
+    @media(min-width:1200px){
+      .section .wrap-inner{max-width:1080px}
+    }
+    
     .section--ghost{background:transparent}
     .section--slab{
       background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
@@ -168,45 +377,210 @@
         linear-gradient(90deg, #0000 calc(32px - 1px), rgba(255,255,255,.05) 32px) top left/32px 100%;
       border-top:1px solid var(--border);
     }
+    
+    /* Mobile grid pattern optimization */
+    @media(max-width:767px){
+      .section--grid{
+        background:
+          linear-gradient(120deg, rgba(44,197,110,.02), transparent 40% 60%, rgba(44,197,110,.015)),
+          linear-gradient(#0000 calc(24px - 1px), rgba(255,255,255,.04) 24px) top left/100% 24px,
+          linear-gradient(90deg, #0000 calc(24px - 1px), rgba(255,255,255,.04) 24px) top left/24px 100%;
+      }
+    }
+    
     .section--slab::before,.section--slab::after{
       content:""; position:absolute; left:0; right:0; height:60px; z-index:-1;
       background: radial-gradient(90% 120% at 50% -20%, rgba(255,255,255,.06), transparent 60%);
     }
     .section--slab::before{ top:-60px; transform:skewY(-1.2deg); transform-origin:top left; }
     .section--slab::after{ bottom:-60px; transform:skewY(1.2deg); transform-origin:bottom left; }
+    
+    /* Mobile slab effects */
+    @media(max-width:767px){
+      .section--slab::before,.section--slab::after{height:40px}
+      .section--slab::before{top:-40px}
+      .section--slab::after{bottom:-40px}
+    }
+    
     .divider{height:1px;margin:48px 0;background:linear-gradient(90deg,transparent,rgba(139,227,159,.45),transparent);filter:blur(.2px)}
+    
+    /* Mobile divider */
+    @media(max-width:767px){
+      .divider{margin:32px 0}
+    }
+    
     .spotlight{display:grid;gap:18px;align-items:center;grid-template-columns:1fr;padding:12px 0}
-    @media (min-width:900px){ .spotlight{grid-template-columns:1.2fr .8fr} .spotlight--flip{grid-template-columns:.9fr 1.1fr} }
+    
+    /* Responsive spotlight */
+    @media (min-width:768px) and (max-width:1023px){ 
+      .spotlight{grid-template-columns:1fr;gap:24px} 
+    }
+    
+    @media (min-width:1024px){ 
+      .spotlight{grid-template-columns:1.2fr .8fr;gap:24px} 
+      .spotlight--flip{grid-template-columns:.9fr 1.1fr} 
+    }
+    
     .spotlight-visual{
       background: radial-gradient(60% 60% at 30% 30%, rgba(139,227,159,.08), transparent 60%), var(--card);
       border:1px solid var(--border); border-radius:14px; min-height:240px; display:grid; place-items:center; padding:24px;
     }
+    
+    /* Mobile spotlight visual */
+    @media(max-width:767px){
+      .spotlight-visual{min-height:180px;padding:20px;border-radius:12px}
+    }
     .caption{display:inline-block;font-size:12px;letter-spacing:.3px;text-transform:uppercase;color:#a6eec5;opacity:.9;margin-bottom:10px}
+    
+    /* Mobile caption optimization */
+    @media(max-width:767px){
+      .caption{font-size:11px;margin-bottom:8px}
+    }
+    
     .callout{border:1px solid var(--border);border-radius:14px;padding:18px 16px;background:linear-gradient(180deg, rgba(139,227,159,.08), rgba(139,227,159,0))}
+    
+    /* Mobile callout */
+    @media(max-width:767px){
+      .callout{padding:14px 12px;border-radius:12px}
+    }
 
     /* ===== In-box typography & accents ===== */
     .kicker{display:inline-block;font-size:12px;letter-spacing:.28px;text-transform:uppercase;color:#a6eec5;opacity:.9;margin-bottom:8px}
+    
+    /* Mobile kicker */
+    @media(max-width:767px){
+      .kicker{font-size:11px;margin-bottom:6px}
+    }
+    
     .rule{height:2px;width:56px;background:linear-gradient(90deg,var(--green),var(--lt));border-radius:2px;margin:8px 0 14px}
+    
+    /* Mobile rule */
+    @media(max-width:767px){
+      .rule{width:48px;margin:6px 0 12px}
+    }
+    
     .tile mark,.card mark{background:linear-gradient(90deg,rgba(139,227,159,.18),rgba(139,227,159,.06));color:inherit;padding:0 .2em;border-radius:.25em}
     .stat{display:inline-flex;align-items:baseline;gap:8px;padding:10px 12px;border-radius:12px;background:linear-gradient(180deg,rgba(139,227,159,.10),rgba(139,227,159,0));border:1px solid var(--border);margin:6px 8px 0 0}
+    
+    /* Mobile stat */
+    @media(max-width:767px){
+      .stat{padding:8px 10px;margin:4px 6px 0 0;gap:6px}
+      .stat b{font-size:18px}
+      .stat small{font-size:11px}
+    }
+    
     .stat b{font-size:20px;line-height:1}
     .stat small{color:var(--muted)}
     .iconlist{list-style:none;padding-left:0;margin:10px 0 0}
     .iconlist li{position:relative;padding-left:22px;margin:8px 0;color:var(--muted)}
     .iconlist li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--lt),var(--green));box-shadow:0 0 0 2px rgba(44,197,110,.12)}
+    
+    /* Mobile iconlist */
+    @media(max-width:767px){
+      .iconlist li{padding-left:20px;margin:6px 0;font-size:14px}
+      .iconlist li::before{width:8px;height:8px;top:.6em}
+    }
+    
     .checklist{list-style:none;padding-left:0;margin:10px 0 0}
     .checklist li{position:relative;padding-left:26px;margin:10px 0;color:var(--muted)}
     .checklist li::before{content:"✓";position:absolute;left:0;top:0;font-weight:700;color:var(--lt)}
+    
+    /* Mobile checklist */
+    @media(max-width:767px){
+      .checklist li{padding-left:22px;margin:8px 0;font-size:14px}
+    }
+    
     .steps{counter-reset:step;list-style:none;padding-left:0;margin:8px 0 0}
     .steps li{counter-increment:step;position:relative;padding-left:36px;margin:12px 0;color:var(--muted)}
     .steps li::before{content:counter(step);position:absolute;left:0;top:.05em;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#06140b;background:linear-gradient(180deg,var(--green),var(--lt));box-shadow:0 6px 18px rgba(44,197,110,.25)}
+    
+    /* Mobile steps */
+    @media(max-width:767px){
+      .steps li{padding-left:32px;margin:10px 0;font-size:14px}
+      .steps li::before{width:22px;height:22px;font-size:12px}
+    }
+    
     .callout-sm{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:12px;background:linear-gradient(180deg,rgba(139,227,159,.06),rgba(139,227,159,0));font-size:14.5px}
+    
+    /* Mobile callout-sm */
+    @media(max-width:767px){
+      .callout-sm{padding:10px 12px;font-size:13px;border-radius:10px}
+    }
+    
     .quote{border-left:3px solid color-mix(in oklab,var(--green) 70%,#fff 0%);padding:10px 14px;margin:12px 0;color:var(--muted);font-style:italic}
+    
+    /* Mobile quote */
+    @media(max-width:767px){
+      .quote{padding:8px 12px;font-size:14px;border-left-width:2px}
+    }
+    
     .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    
+    /* Mobile badges */
+    @media(max-width:767px){
+      .badges{gap:6px;margin-top:8px}
+    }
+    
     .badge{font-size:12px;padding:6px 10px;border-radius:999px;color:#0b130d;background:linear-gradient(180deg,var(--lt),var(--green))}
     .badge--outline{color:var(--text);background:transparent;border:1px solid rgba(139,227,159,.5)}
+    
+    /* Mobile badge */
+    @media(max-width:767px){
+      .badge{font-size:11px;padding:5px 8px}
+    }
+    
     .meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}
     .meta .dot::before{content:"• ";color:rgba(255,255,255,.35)}
+    
+    /* Mobile meta */
+    @media(max-width:767px){
+      .meta{gap:8px;font-size:11px;margin-top:6px}
+    }
+    
+    /* ===== Touch device optimizations ===== */
+    @media(hover:none){
+      .metric:hover{transform:none;box-shadow:none}
+      .metric:hover::before{opacity:0}
+      .btn:hover{filter:none}
+      .nav-links a:hover{color:var(--muted)}
+      .nav-links a:hover::after{width:0}
+      .eyebrow:hover{background:rgba(49,196,108,.1);border-color:rgba(49,196,108,.25);transform:none}
+    }
+    
+    /* ===== Improved tap targets for mobile ===== */
+    @media(max-width:767px){
+      .nav-links a{min-height:44px;display:flex;align-items:center}
+      .btn{min-height:44px}
+      .eyebrow{min-height:36px;display:inline-flex;align-items:center}
+    }
+    
+    /* ===== Performance optimizations ===== */
+    @media(prefers-reduced-motion:reduce){
+      .hero[data-animated="true"] .metric h3{animation:none;opacity:1;transform:none}
+      .metric::before{display:none}
+      .metric:hover{transform:none}
+      .tile:hover{transform:none}
+      .btn:active{transform:none}
+      .eyebrow:hover{transform:none}
+      .bg-rings::before{animation:none}
+    }
+    
+    /* ===== High contrast mode support ===== */
+    @media(prefers-contrast:high){
+      :root{
+        --border:#333;
+        --card:#111;
+        --muted:#ccc;
+      }
+    }
+    
+    /* ===== Print styles ===== */
+    @media print{
+      .bg-orbs,.bg-grid,.bg-rings,.nav{display:none}
+      body{background:#fff;color:#000}
+      .section{page-break-inside:avoid;border:none;padding:20px 0}
+      .tile{break-inside:avoid;border:1px solid #ccc}
+    }
   </style>
 </head>
 <body>
@@ -244,7 +618,7 @@
     <section id="solution" class="section section--slab">
       <div class="wrap-inner">
         <span class="caption">Strategy</span>
-        <h2>EVH’S Strategic approach to reshaping the energy industry. It’s not disruption—it’s evolution.</h2>
+        <h2>EVH'S Strategic approach to reshaping the energy industry. It's not disruption—it's evolution.</h2>
 
         <div class="spotlight" style="margin:18px 0 28px;">
           <div>
@@ -303,7 +677,7 @@
           <article class="tile">
             <span class="kicker">Overview</span>
             <div class="rule"></div>
-            <p>At EVH Corp, we’re leading the energy transition movement through experience, innovation, and strategy. With a hands-on approach, we deliver more than just capital—we provide <mark>insight</mark>, partnership, and long-term support to help visionary companies scale.</p>
+            <p>At EVH Corp, we're leading the energy transition movement through experience, innovation, and strategy. With a hands-on approach, we deliver more than just capital—we provide <mark>insight</mark>, partnership, and long-term support to help visionary companies scale.</p>
             <div class="badges">
               <span class="badge">Houston</span>
               <span class="badge badge--outline">Long-term</span>
@@ -314,7 +688,7 @@
           <article class="tile">
             <span class="kicker">Approach</span>
             <div class="rule"></div>
-            <p>Our strategic approach isn't just a vision—it's EVH’s practical blueprint for meaningful, strategic, and long-term impact.</p>
+            <p>Our strategic approach isn't just a vision—it's EVH's practical blueprint for meaningful, strategic, and long-term impact.</p>
             <ul class="checklist">
               <li>Identify</li>
               <li>Partner</li>
@@ -361,7 +735,7 @@
             <div class="rule"></div>
             <p><strong>Governance, Corporate Development &amp; Strategy</strong></p>
             <p>Ben is the Founder and CEO of EVH Corporate Development, LLC, with 39+ years of leadership in the energy transition. He previously led Vertex Energy through refinery transformation for renewable fuels. A Harvard AMP graduate and Ernst &amp; Young Entrepreneur of the Year National finalist, Cowart is recognized for bridging traditional energy with sustainable innovation across the evolving energy landscape.</p>
-            <blockquote class="quote">“A successful business is built on commitment to excellence, mutual trust, & care for others.”</blockquote>
+            <blockquote class="quote">"A successful business is built on commitment to excellence, mutual trust, & care for others."</blockquote>
             <div class="meta">
               <span class="badge badge--outline">Harvard AMP</span>
               <span class="badge badge--outline">EY EOY National Finalist</span>
@@ -401,7 +775,7 @@ markets execution.</p>
             <h3>Taylor Barnes</h3>
             <div class="rule"></div>
             <p><strong>Finance Major, Corporate Execution</strong></p>
-            <p>Taylor Barnes, a finance major intern at EVH Corporate Development, supports key research and operational initiatives. Currently a Dean’s List student at the University of St. Thomas, she demonstrates strong analytical and entrepreneurial skills through her academic research and competition involvement.</p>
+            <p>Taylor Barnes, a finance major intern at EVH Corporate Development, supports key research and operational initiatives. Currently a Dean's List student at the University of St. Thomas, she demonstrates strong analytical and entrepreneurial skills through her academic research and competition involvement.</p>
             <div class="badges">
               <span class="badge badge--outline">FP&amp;A</span>
               <span class="badge badge--outline">AI workflows</span>
@@ -422,7 +796,7 @@ markets execution.</p>
           <span class="kicker">Overview</span>
           <h3>Dark green energy transition</h3>
           <div class="rule"></div>
-          <p>EVH Corp is an energy-focused operating and holding company pioneering the “dark green energy transition” by transforming legacy energy assets into <mark>carbon-light</mark>, <mark>tech-forward</mark>, and commercially viable platforms. The company combines strategic capital, operational expertise, and a deep focus portfolio approach to enable scalable growth across targeted sectors.</p>
+          <p>EVH Corp is an energy-focused operating and holding company pioneering the "dark green energy transition" by transforming legacy energy assets into <mark>carbon-light</mark>, <mark>tech-forward</mark>, and commercially viable platforms. The company combines strategic capital, operational expertise, and a deep focus portfolio approach to enable scalable growth across targeted sectors.</p>
           <div class="badges">
             <span class="badge">Operator DNA</span>
             <span class="badge badge--outline">Capital + Execution</span>
@@ -473,7 +847,7 @@ markets execution.</p>
           <span class="kicker">Track record (Founder)</span>
           <h3>Public company operator</h3>
           <div class="rule"></div>
-          <p>Founded in 2025 by Benjamin Cowart, a proven operator and public company CEO with 40 years of experience across energy, industrial, and sustainability sectors. As the founder and former CEO of Vertex Energy (NASDAQ: VTNR), he led over <mark>$600M in acquisitions</mark>, including Shell’s Mobile refinery, and built a track record scaling ventures in circular economy, energy tech, logistics, and renewable fuels. At EVH Corp, he brings deep sector expertise and public market acumen to drive transformative investments in the energy transition. Ben’s history of driving success and creating long-term value has long been recognized in the industry including being named Ernst &amp; Young Entrepreneur Of The Year® Regional Award winner and National Finalist for 2017.</p>
+          <p>Founded in 2025 by Benjamin Cowart, a proven operator and public company CEO with 40 years of experience across energy, industrial, and sustainability sectors. As the founder and former CEO of Vertex Energy (NASDAQ: VTNR), he led over <mark>$600M in acquisitions</mark>, including Shell's Mobile refinery, and built a track record scaling ventures in circular economy, energy tech, logistics, and renewable fuels. At EVH Corp, he brings deep sector expertise and public market acumen to drive transformative investments in the energy transition. Ben's history of driving success and creating long-term value has long been recognized in the industry including being named Ernst &amp; Young Entrepreneur Of The Year® Regional Award winner and National Finalist for 2017.</p>
           <div class="meta">
             <span class="badge badge--outline">NASDAQ: VTNR</span>
             <span class="badge badge--outline">$600M+ M&amp;A</span>
@@ -547,10 +921,3 @@ document.querySelector('.eyebrow').addEventListener('click', function(e) {
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
