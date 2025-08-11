@@ -35,4 +35,495 @@
     }
     .bg-grid{z-index:-2;--grid:24px;--line:rgba(255,255,255,.05);background:
       linear-gradient(120deg, rgba(44,197,110,.06), transparent 25%, transparent 75%, rgba(44,197,110,.05)),
-      linear-gradient(#0000 calc(var(--grid)*6 - 1px), rgba(255,255,255,.07) calc(var*
+      linear-gradient(#0000 calc(var(--grid)*6 - 1px), rgba(255,255,255,.07) calc(var(--grid)*6)) top left/100% calc(var(--grid)*6),
+      linear-gradient(90deg, #0000 calc(var(--grid)*6 - 1px), rgba(255,255,255,.07) calc(var(--grid)*6)) top left/calc(var(--grid)*6) 100%,
+      linear-gradient(#0000 calc(var(--grid) - 1px), var(--line) var(--grid)) top left/100% var(--grid),
+      linear-gradient(90deg, #0000 calc(var(--grid) - 1px), var(--line) var(--grid)) top left/var(--grid) 100%,
+      var(--bg);
+      background-blend-mode:normal,overlay,overlay,normal,normal,normal;
+    }
+    .bg-rings{z-index:-1;display:grid;place-items:center}
+    .bg-rings::before{
+      content:"";width:min(70vmin,700px);aspect-ratio:1;border-radius:50%;
+      background:
+        radial-gradient(closest-side, color-mix(in oklab, var(--green) 30%, transparent) 0 60%, transparent 65%),
+        conic-gradient(from 210deg, color-mix(in oklab, var(--lt) 80%, transparent) 0 20%, transparent 60% 100%);
+      filter:blur(18px) saturate(1.05);opacity:.55;animation:ringPulse 7s ease-in-out infinite;
+    }
+    @keyframes ringPulse{0%,100%{transform:scale(.96);opacity:.5}50%{transform:scale(1.03);opacity:.62}}
+    @media (prefers-reduced-motion:reduce){.bg-rings::before{animation:none}}
+
+    /* ===== Layout ===== */
+    .wrap{max-width:860px;margin:0 auto;padding:48px 20px}
+    .nav{position:sticky;top:0;backdrop-filter:blur(8px);background:rgba(10,10,10,.55);
+      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 20px 8px;z-index:10}
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text);font-weight:600;letter-spacing:.2px}
+    .brand-logo{width:28px;height:28px;border-radius:8px;position:relative;background:#0d120f;border:1px solid var(--border)}
+    .brand-logo::before{content:"";position:absolute;inset:5px 6px;width:16px;height:16px;border-radius:50%;
+      background:radial-gradient(circle at 35% 35%, var(--lt), var(--green)); box-shadow:0 8px 24px rgba(44,197,110,.35)}
+    .nav a{color:var(--muted);text-decoration:none;font-size:14px}
+    .nav a:hover{color:var(--text)}
+    .nav-links{white-space:nowrap}
+    .nav-links a{position:relative;padding-bottom:8px;display:inline-block}
+    .nav-links a + a::before{content:"·";margin:0 8px;color:var(--muted)}
+    .nav-links a::after{
+      content:"";position:absolute;left:0;bottom:0;height:2px;width:0%;
+      background:linear-gradient(90deg,var(--green),var(--lt));transition:width .25s ease;
+    }
+    .nav-links a:hover::after{width:100%}
+
+    .hero{padding:72px 0 36px;text-align:center}
+    .eyebrow{display:inline-block;font-size:14px;padding:6px 10px;color:#a6eec5;background:rgba(49,196,108,.1);border:1px solid rgba(49,196,108,.25);border-radius:999px;letter-spacing:.2px}
+    .title{font-family:Georgia,"Times New Roman",Times,serif;font-weight:600;font-size:clamp(36px,6vw,68px);line-height:1.05;letter-spacing:-.3px;margin:18px 0 16px}
+    .subtitle{color:var(--muted);font-size:clamp(16px,2.2vw,20px);max-width:52ch;margin:0 auto}
+
+    /* ===== HERO metrics: animated via data-animated guard ===== */
+    .metrics{display:grid;grid-template-columns:1fr;gap:16px;margin:40px auto 0;max-width:780px}
+    @media(min-width:760px){.metrics{grid-template-columns:repeat(3,1fr);gap:20px}}
+    .metric{
+      background:linear-gradient(180deg, rgba(139,227,159,.08), rgba(139,227,159,.02));
+      border:1px solid var(--border);border-radius:16px;padding:24px 20px;text-align:center;
+      position:relative;overflow:hidden;transition:all .3s ease; backdrop-filter:blur(8px);
+    }
+    .metric::before{
+      content:"";position:absolute;inset:0;border-radius:16px;padding:1px;
+      background:linear-gradient(135deg, rgba(139,227,159,.3), transparent 50%, rgba(44,197,110,.2));
+      -webkit-mask:linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity .3s ease;
+    }
+    .metric:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(44,197,110,.15)}
+    .metric:hover::before{opacity:1}
+
+    /* default: no animation yet (until data-animated flips to true) */
+    .metric h3{
+      margin:0;font-size:clamp(32px,4.5vw,48px);font-weight:700;
+      background:linear-gradient(135deg, var(--lt), var(--green));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;line-height:1.1;letter-spacing:-.5px;
+      opacity:0;
+    }
+    .metric p{margin:8px 0 0;color:var(--muted);font-size:14px;line-height:1.4;font-weight:500}
+
+    /* turn on the animation when the guard is flipped */
+    .hero[data-animated="true"] .metric h3{
+      animation:countUp 2s ease-out forwards;
+    }
+    .hero[data-animated="true"] .metric:nth-child(1) h3{animation-delay:.2s}
+    .hero[data-animated="true"] .metric:nth-child(2) h3{animation-delay:.4s}
+    .hero[data-animated="true"] .metric:nth-child(3) h3{animation-delay:.6s}
+
+    @keyframes countUp{
+      0%{opacity:0;transform:translateY(20px) scale(.8)}
+      60%{transform:translateY(-2px) scale(1.05)}
+      100%{opacity:1;transform:translateY(0) scale(1)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .hero[data-animated="true"] .metric h3{animation:none;opacity:1;transform:none}
+      .metric::before{display:none}
+      .metric:hover{transform:none}
+    }
+
+    .card{margin:36px auto 0;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;align-items:center;gap:14px;max-width:720px}
+    .card small{color:var(--muted)}
+    .input{flex:1;display:flex;gap:10px;background:#0e0f10;border:1px solid var(--border);border-radius:12px;padding:8px}
+    .input input{flex:1;background:transparent;border:0;color:var(--text);padding:12px 12px;font-size:16px;outline:none}
+    .btn{appearance:none;border:0;background:var(--green);color:#06140b;font-weight:700;padding:12px 18px;border-radius:10px;cursor:pointer;transition:transform .04s ease, filter .2s}
+    .btn:hover{filter:brightness(1.05)} .btn:active{transform:translateY(1px)}
+
+    .section{position:relative;padding:84px 0 12px;border-top:1px solid var(--border);margin-top:64px;scroll-margin-top:84px}
+    .section h2{font-family:Georgia,"Times New Roman",Times,serif;font-weight:600;font-size:clamp(26px,3.4vw,40px);line-height:1.15;margin:0 0 8px}
+    .lead{color:var(--muted);margin:0 0 22px}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:760px){.grid{grid-template-columns:1fr 1fr;gap:18px}}
+    .tile{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;transition:transform .15s ease, box-shadow .2s ease, border-color .2s ease}
+    .tile:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.35);border-color:rgba(139,227,159,.35)}
+    footer{color:var(--muted);font-size:13px;padding:64px 0 32px;text-align:center}
+    .tiny{color:#9aa0a6;font-size:12px}
+    :focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:6px;transition:outline-color .2s}
+
+    /* ===== Section variants (Cursor-style variety) ===== */
+    .section .wrap-inner{max-width:860px;margin:0 auto}
+    .section--ghost{background:transparent}
+    .section--slab{
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+      border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    }
+    .section--grid{
+      background:
+        linear-gradient(120deg, rgba(44,197,110,.025), transparent 30% 70%, rgba(44,197,110,.02)),
+        linear-gradient(#0000 calc(32px - 1px), rgba(255,255,255,.05) 32px) top left/100% 32px,
+        linear-gradient(90deg, #0000 calc(32px - 1px), rgba(255,255,255,.05) 32px) top left/32px 100%;
+      border-top:1px solid var(--border);
+    }
+    .section--slab::before,.section--slab::after{
+      content:""; position:absolute; left:0; right:0; height:60px; z-index:-1;
+      background: radial-gradient(90% 120% at 50% -20%, rgba(255,255,255,.06), transparent 60%);
+    }
+    .section--slab::before{ top:-60px; transform:skewY(-1.2deg); transform-origin:top left; }
+    .section--slab::after{ bottom:-60px; transform:skewY(1.2deg); transform-origin:bottom left; }
+    .divider{height:1px;margin:48px 0;background:linear-gradient(90deg,transparent,rgba(139,227,159,.45),transparent);filter:blur(.2px)}
+    .spotlight{display:grid;gap:18px;align-items:center;grid-template-columns:1fr;padding:12px 0}
+    @media (min-width:900px){ .spotlight{grid-template-columns:1.2fr .8fr} .spotlight--flip{grid-template-columns:.9fr 1.1fr} }
+    .spotlight-visual{
+      background: radial-gradient(60% 60% at 30% 30%, rgba(139,227,159,.08), transparent 60%), var(--card);
+      border:1px solid var(--border); border-radius:14px; min-height:240px; display:grid; place-items:center; padding:24px;
+    }
+    .caption{display:inline-block;font-size:12px;letter-spacing:.3px;text-transform:uppercase;color:#a6eec5;opacity:.9;margin-bottom:10px}
+    .callout{border:1px solid var(--border);border-radius:14px;padding:18px 16px;background:linear-gradient(180deg, rgba(139,227,159,.08), rgba(139,227,159,0))}
+
+    /* ===== In-box typography & accents ===== */
+    .kicker{display:inline-block;font-size:12px;letter-spacing:.28px;text-transform:uppercase;color:#a6eec5;opacity:.9;margin-bottom:8px}
+    .rule{height:2px;width:56px;background:linear-gradient(90deg,var(--green),var(--lt));border-radius:2px;margin:8px 0 14px}
+    .tile mark,.card mark{background:linear-gradient(90deg,rgba(139,227,159,.18),rgba(139,227,159,.06));color:inherit;padding:0 .2em;border-radius:.25em}
+    .stat{display:inline-flex;align-items:baseline;gap:8px;padding:10px 12px;border-radius:12px;background:linear-gradient(180deg,rgba(139,227,159,.10),rgba(139,227,159,0));border:1px solid var(--border);margin:6px 8px 0 0}
+    .stat b{font-size:20px;line-height:1}
+    .stat small{color:var(--muted)}
+    .iconlist{list-style:none;padding-left:0;margin:10px 0 0}
+    .iconlist li{position:relative;padding-left:22px;margin:8px 0;color:var(--muted)}
+    .iconlist li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 30% 30%,var(--lt),var(--green));box-shadow:0 0 0 2px rgba(44,197,110,.12)}
+    .checklist{list-style:none;padding-left:0;margin:10px 0 0}
+    .checklist li{position:relative;padding-left:26px;margin:10px 0;color:var(--muted)}
+    .checklist li::before{content:"✓";position:absolute;left:0;top:0;font-weight:700;color:var(--lt)}
+    .steps{counter-reset:step;list-style:none;padding-left:0;margin:8px 0 0}
+    .steps li{counter-increment:step;position:relative;padding-left:36px;margin:12px 0;color:var(--muted)}
+    .steps li::before{content:counter(step);position:absolute;left:0;top:.05em;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#06140b;background:linear-gradient(180deg,var(--green),var(--lt));box-shadow:0 6px 18px rgba(44,197,110,.25)}
+    .callout-sm{border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:12px;background:linear-gradient(180deg,rgba(139,227,159,.06),rgba(139,227,159,0));font-size:14.5px}
+    .quote{border-left:3px solid color-mix(in oklab,var(--green) 70%,#fff 0%);padding:10px 14px;margin:12px 0;color:var(--muted);font-style:italic}
+    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .badge{font-size:12px;padding:6px 10px;border-radius:999px;color:#0b130d;background:linear-gradient(180deg,var(--lt),var(--green))}
+    .badge--outline{color:var(--text);background:transparent;border:1px solid rgba(139,227,159,.5)}
+    .meta{display:flex;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:12px;margin-top:8px}
+    .meta .dot::before{content:"• ";color:rgba(255,255,255,.35)}
+  </style>
+</head>
+<body>
+  <!-- Background layers -->
+  <div class="bg-orbs" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+  <div class="bg-rings" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <!-- NAV -->
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="#"><span class="brand-logo" aria-hidden="true"></span>EVH Corporate Development, LLC</a>
+      <div class="nav-links">
+        <a href="#solution">Solution</a>
+        <a href="#company">Company</a>
+        <a href="#leadership">Leadership</a>
+        <a href="#investment">Investment Materials</a>
+        <a href="#contact">Partner with us</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero" id="home" data-animated="false">
+      <span class="eyebrow">Partner with us</span>
+      <h1 class="title">Where energy &amp; environment intersect</h1>
+      <p class="subtitle">EVH Corporate Development, LLC is an energy operating &amp; holdings firm<br/>bending the curve on new energy solutions.</p>
+
+      <div class="metrics" aria-label="Impact metrics">
+        <div class="metric"><h3>30+</h3><p>Years of impact</p></div>
+        <div class="metric"><h3>$500M+</h3><p>Capital deployed by our leadership team in the last 5 years</p></div>
+        <div class="metric"><h3>$3.3B+</h3><p>Highest annualized revenue from startup ventures</p></div>
+      </div>
+    </header>
+
+    <!-- SOLUTION (site copy) -->
+    <section id="solution" class="section section--slab">
+      <div class="wrap-inner">
+        <span class="caption">Strategy</span>
+        <h2>EVH’S Strategic approach to reshaping the energy industry. It’s not disruption—it’s evolution.</h2>
+
+        <div class="spotlight" style="margin:18px 0 28px;">
+          <div>
+            <p class="lead">We evolve traditional energy assets via sustainable tech & strategic investments—innovation without abandoning legacy infrastructure.</p>
+            <div class="divider"></div>
+          </div>
+          <div class="spotlight-visual" aria-hidden="true">
+            <div style="width:140px;aspect-ratio:1;border-radius:50%;
+                background: radial-gradient(circle at 35% 35%, var(--lt), var(--green));
+                filter: blur(6px); opacity:.8;"></div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <article class="tile">
+            <span class="kicker">Pillar</span>
+            <h3>Innovative</h3>
+            <div class="rule"></div>
+            <p>We evolve traditional energy assets and infrastructure, transforming them through <mark>sustainable technologies</mark> and strategic investments. By blending legacy expertise with new solutions, EVH drives innovation without abandoning existing infrastructure.</p>
+            <div class="badges">
+              <span class="badge">Operator-led</span>
+              <span class="badge badge--outline">Legacy + Tech</span>
+              <span class="badge">Scalable</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Pillar</span>
+            <h3>Carbon-Light</h3>
+            <div class="rule"></div>
+            <p>We strategically evolve traditional assets to <mark>lower carbon output</mark>, acknowledging current energy needs while accelerating real-world impact through targeted innovations.</p>
+            <ul class="iconlist">
+              <li>Incremental emissions reduction</li>
+              <li>Pragmatic transition pathways</li>
+              <li>Clear unit economics</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Pillar</span>
+            <h3>Tech-Forward</h3>
+            <div class="rule"></div>
+            <p>Data-driven, digitized, and smart—leveraging <mark>analytics</mark>, <mark>automation</mark>, and AI to optimize operations, sustainability, and investment outcomes.</p>
+            <div class="callout-sm"><b>Outcomes:</b> Better uptime, pricing, routing, and reporting across physical networks.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPANY (site copy) -->
+    <section id="company" class="section section--ghost">
+      <div class="wrap-inner">
+        <span class="caption">Company</span>
+        <h2>EVH Corporate Development, LLC</h2>
+        <div class="grid">
+          <article class="tile">
+            <span class="kicker">Overview</span>
+            <div class="rule"></div>
+            <p>At EVH Corp, we’re leading the energy transition movement through experience, innovation, and strategy. With a hands-on approach, we deliver more than just capital—we provide <mark>insight</mark>, partnership, and long-term support to help visionary companies scale.</p>
+            <div class="badges">
+              <span class="badge">Houston</span>
+              <span class="badge badge--outline">Long-term</span>
+              <span class="badge">Partnership</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Approach</span>
+            <div class="rule"></div>
+            <p>Our strategic approach isn't just a vision—it's EVH’s practical blueprint for meaningful, strategic, and long-term impact.</p>
+            <ul class="checklist">
+              <li>Identify</li>
+              <li>Partner</li>
+              <li>Scale</li>
+              <li>Impact</li>
+            </ul>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Stakeholder posture</span>
+            <div class="rule"></div>
+            <p>We act as committed stakeholders alongside our partners—supporting them with deep expertise, long-term vision, and strategy.</p>
+            <div class="meta">
+              <span class="dot">Operator heritage</span>
+              <span class="dot">Capital + Execution</span>
+              <span class="dot">Sector focus</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Location</span>
+            <div class="rule"></div>
+            <p>Headquartered in Houston, EVH develops operating strategies that identify, partner, scale, and impact companies with transformative potential.</p>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Commitment</span>
+            <div class="rule"></div>
+            <p>Doubling down on our commitment to identify and support visionary companies that will drive meaningful change in industrial innovation and sustainable infrastructure.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERSHIP (site copy) -->
+    <section id="leadership" class="section section--grid">
+      <div class="wrap-inner">
+        <span class="caption">Leadership</span>
+        <h2>EVH Leadership</h2>
+        <p class="lead">Bending the curve on energy transition—guided by experience, powered by innovation, committed to sustainable impact.</p>
+        <div class="grid">
+          <article class="tile">
+            <span class="kicker">CEO / Founder</span>
+            <h3>Benjamin P. Cowart</h3>
+            <div class="rule"></div>
+            <p><strong>Governance, Corporate Development &amp; Strategy</strong></p>
+            <p>Ben is the Founder and CEO of EVH Corporate Development, LLC, with 39+ years of leadership in the energy transition. He previously led Vertex Energy through refinery transformation for renewable fuels. A Harvard AMP graduate and Ernst &amp; Young Entrepreneur of the Year National finalist, Cowart is recognized for bridging traditional energy with sustainable innovation across the evolving energy landscape.</p>
+            <blockquote class="quote">“A successful business is built on commitment to excellence, mutual trust, & care for others.”</blockquote>
+            <div class="meta">
+              <span class="badge badge--outline">Harvard AMP</span>
+              <span class="badge badge--outline">EY EOY National Finalist</span>
+              <span class="badge badge--outline">Public company CEO</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">CFO</span>
+            <h3>Chris Carlson</h3>
+            <div class="rule"></div>
+            <p><strong>Compliance and governance</strong></p>
+            <p>Chris Carlson brings over 25 years of experience leading financial strategy, regulatory compliance, and capital
+markets execution.</p>
+            <div class="meta">
+              <span class="badge badge--outline">Risk management</span>
+              <span class="badge badge--outline">Capital allocation </span>
+              <span class="badge badge--outline">Public company CFO</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Executive Director</span>
+            <h3>Ayana L. Hill</h3>
+            <div class="rule"></div>
+            <p><strong>Creative Strategy &amp; Brand Innovation</strong></p>
+            <p>Ayana Hill is a strategic brand innovator with over 13 years' experience in technology, advertising, government, and sports/entertainment. At EVH Corp, she oversees brand identity, communications, and creative operations, driving impactful storytelling and sustainable energy transition solutions.</p>
+            <div class="meta">
+              <span class="badge badge--outline">Brand systems</span>
+              <span class="badge badge--outline">Cross-sector experience</span>
+              <span class="badge badge--outline">Creative ops</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Analyst Intern</span>
+            <h3>Taylor Barnes</h3>
+            <div class="rule"></div>
+            <p><strong>Finance Major, Corporate Execution</strong></p>
+            <p>Taylor Barnes, a finance major intern at EVH Corporate Development, supports key research and operational initiatives. Currently a Dean’s List student at the University of St. Thomas, she demonstrates strong analytical and entrepreneurial skills through her academic research and competition involvement.</p>
+            <div class="badges">
+              <span class="badge badge--outline">FP&amp;A</span>
+              <span class="badge badge--outline">AI workflows</span>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- INVESTMENT MATERIALS (factsheet copy) -->
+    <section id="investment" class="section section--slab">
+      <div class="wrap-inner">
+        <span class="caption">Investment</span>
+        <div class="callout">
+          <h2 style="margin:0 0 6px">Investment Materials</h2>
+          <p style="margin:0">Overview, sector focus, criteria, and track record from EVH’s factsheet.</p>
+        </div>
+
+        <div class="tile" style="margin:18px 0">
+          <span class="kicker">Overview</span>
+          <h3>Dark green energy transition</h3>
+          <div class="rule"></div>
+          <p>EVH Corp is an energy-focused operating and holding company pioneering the “dark green energy transition” by transforming legacy energy assets into <mark>carbon-light</mark>, <mark>tech-forward</mark>, and commercially viable platforms. The company combines strategic capital, operational expertise, and a deep focus portfolio approach to enable scalable growth across targeted sectors.</p>
+          <div class="badges">
+            <span class="badge">Operator DNA</span>
+            <span class="badge badge--outline">Capital + Execution</span>
+            <span class="badge">Scale</span>
+          </div>
+        </div>
+
+        <div class="grid">
+          <article class="tile">
+            <span class="kicker">Focus</span>
+            <h3>Sector Focus</h3>
+            <div class="rule"></div>
+            <ul class="iconlist">
+              <li>Downstream Energy Assets</li>
+              <li>Retail Fuel Technology</li>
+              <li>Renewable &amp; sustainable energy</li>
+              <li>Energy Infrastructure Technology</li>
+              <li>Transportation &amp; Logistics</li>
+              <li>Manufacturing &amp; Industrial</li>
+            </ul>
+            <div class="meta">
+              <span class="badge badge--outline">North America</span>
+              <span class="badge badge--outline">Industrial innovation</span>
+              <span class="badge badge--outline">Sustainable infrastructure</span>
+            </div>
+          </article>
+
+          <article class="tile">
+            <span class="kicker">Criteria</span>
+            <h3>Investment Criteria</h3>
+            <div class="rule"></div>
+            <div>
+              <div class="stat"><b>Up to $150M</b><small>Platform (control)</small></div>
+              <div class="stat"><b>Up to $50M</b><small>Venture stage</small></div>
+            </div>
+            <ul class="checklist">
+              <li>High-growth, revenue-generating with de-risked technology</li>
+              <li>Clear sustainable competitive advantage</li>
+              <li>Strong leadership with scaling track record</li>
+              <li>North America headquartered</li>
+              <li>Sustainable cash flows with transformation potential</li>
+            </ul>
+            <div class="callout-sm"><b>Structure:</b> Usage-linked, multi-year agreements with enterprise and municipal counterparties preferred.</div>
+          </article>
+        </div>
+
+        <div class="tile" style="margin-top:18px">
+          <span class="kicker">Track record (Founder)</span>
+          <h3>Public company operator</h3>
+          <div class="rule"></div>
+          <p>Founded in 2025 by Benjamin Cowart, a proven operator and public company CEO with 40 years of experience across energy, industrial, and sustainability sectors. As the founder and former CEO of Vertex Energy (NASDAQ: VTNR), he led over <mark>$600M in acquisitions</mark>, including Shell’s Mobile refinery, and built a track record scaling ventures in circular economy, energy tech, logistics, and renewable fuels. At EVH Corp, he brings deep sector expertise and public market acumen to drive transformative investments in the energy transition. Ben’s history of driving success and creating long-term value has long been recognized in the industry including being named Ernst &amp; Young Entrepreneur Of The Year® Regional Award winner and National Finalist for 2017.</p>
+          <div class="meta">
+            <span class="badge badge--outline">NASDAQ: VTNR</span>
+            <span class="badge badge--outline">$600M+ M&amp;A</span>
+            <span class="badge badge--outline">Shell Mobile acquisition</span>
+          </div>
+        </div>
+
+        <div class="tile" style="margin-top:18px">
+          <span class="kicker">Holdings</span>
+          <h3>Current Portfolio</h3>
+          <div class="rule"></div>
+          <p>Details available upon request.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section section--ghost">
+      <div class="wrap-inner">
+        <span class="caption">Contact</span>
+        <h2>Partner with us</h2>
+        <form class="card" action="#" method="post" aria-label="Contact form">
+          <div class="input"><input type="text" name="first_name" placeholder="First name" aria-label="First name" required /></div>
+          <div class="input"><input type="email" name="email" placeholder="Email" aria-label="Email" required /></div>
+          <div class="input"><input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" /></div>
+          <button class="btn" type="submit">Send</button>
+        </form>
+        <p class="tiny" style="margin-top:12px;">4201 Main Street, Houston, TX, 77002, Suite 227</p>
+      </div>
+    </section>
+
+    <footer>
+      <div class="tiny">© EVH Corporate Development, LLC • Houston, TX</div>
+    </footer>
+  </div>
+
+  <!-- JS: nav active underline + hero data-animated guard -->
+  <script>
+    // Active link highlight on scroll
+    const links=[...document.querySelectorAll('.nav-links a')];
+    const ids=links.map(a=>a.getAttribute('href').slice(1));
+    const sections=ids.map(id=>document.getElementById(id)).filter(Boolean);
+    const obs=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const id=e.target.id;
+        links.forEach(a=>a.classList.toggle('is-active', a.getAttribute('href')==='#'+id));
+      });
+    },{rootMargin:'-40% 0px -50% 0px',threshold:0});
+    sections.forEach(s=>obs.observe(s));
+    const style=document.createElement('style'); style.textContent='.nav-links a.is-active::after{width:100%}'; document.head.appendChild(style);
+
+    // Hero animation: run once per load using data-animated guard
+    document.addEventListener('DOMContentLoaded', () => {
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
+      if (hero.dataset.animated === 'true') return; // already ran
+      hero.dataset.animated = 'true'; // flip the guard to trigger CSS animations
+    });
+  </script>
+</body>
+</html>
