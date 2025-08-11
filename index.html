@@ -521,9 +521,21 @@ markets execution.</p>
       if (hero.dataset.animated === 'true') return; // already ran
       hero.dataset.animated = 'true'; // flip the guard to trigger CSS animations
     });
+    // Smooth scroll for eyebrow link
+document.querySelector('.eyebrow').addEventListener('click', function(e) {
+  e.preventDefault();
+  const target = document.querySelector('#contact');
+  if (target) {
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
+  }
+});
   </script>
 </body>
 </html>
+
 
 
 
